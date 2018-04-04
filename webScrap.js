@@ -27,14 +27,19 @@ urls.forEach(function(url){
 */
 
 function saveWebPage(url, filename) {
-
-    rp(url).then(function (htmlString) {
-        const $ = cheerio.load(body);
+    const options = {
+        uri: url,
+        transform: function (body) {
+            return cheerio.load(body);
+        }
+    };
+    rp(options).then(function (data) {
+        $('p').text()
 
         fs.outputFile(filename, htmlString)
 
     }).catch(err => console.log(err));
 }
 
-saveWebPage('https://en.wikipedia.org/wiki/Futures_and_promises', 'test.txt');
+saveWebPage('https://en.wikipedia.org/wiki/Futures_and_promises', 'test.html');
 
