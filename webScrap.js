@@ -4,6 +4,7 @@ const promise = require('bluebird');
 const bodyParser = require('body-parser');
 const rp = require('request-promise');
 const fs = require('fs-extra');
+
 const cheerio = require('cheerio');
 
 
@@ -26,30 +27,14 @@ urls.forEach(function(url){
 */
 
 function saveWebPage(url, filename) {
-    const options = {
-        uri: url,
-        transform: function (body) {
-            return cheerio.load(body);
-        }
-    };
 
-    const data = options.transform;
+    rp(url).then(function (htmlString) {
+        const $ = cheerio.load(body);
 
-    rp(options).then(function (data) {
-        fs.outputFile(filename, data)
-            .then(function () {
-                fs.readFile(filename, 'utf8')
-            })
-            .then(data => {
-                console.log(data);
-            })
-            .catch(err => {
-                console.error(err)
-            })
-            .catch(err => console.log(err));
+        fs.outputFile(filename, htmlString)
 
-    });
+    }).catch(err => console.log(err));
 }
 
-saveWebPage('https://en.wikipedia.org/wiki/Futures_and_promises', 'test.html');
+saveWebPage('https://en.wikipedia.org/wiki/Futures_and_promises', 'test.txt');
 
