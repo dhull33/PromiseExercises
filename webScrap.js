@@ -35,7 +35,7 @@ function saveWebPage(url, filename) {
         }
     };
     rp(options).then(function (data) {
-        $('p').text()
+        //$('p').text()
 
         fs.outputFile(filename, htmlString)
 
